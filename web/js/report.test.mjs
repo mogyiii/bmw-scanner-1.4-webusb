@@ -42,6 +42,17 @@ const bytes = (s) => Uint8Array.from(s.trim().split(/\s+/), (b) => parseInt(b, 1
     [body.includes('0x6A'), body.includes('0x6a')], [true, false]);
   check('issue: without a log, the paste reminder stands in for it',
     [body.includes('<details>'), body.includes('did not fit in the link')], [false, true]);
+  /*
+   * The reminder used to be an HTML comment, and GitHub renders a comment as nothing — so the one
+   * instruction asking the reporter for more work was invisible in the posted issue. Issue #2 came
+   * back without the trace. Nothing in the body may hide inside a comment again.
+   */
+  check('issue: nothing in the body is hidden inside an HTML comment',
+    /<!--/.test(body), false);
+  check('issue: it asks what is fitted to the car, which is what narrows an address',
+    /Fitted to it/.test(body), true);
+  check('issue: it says why one report alone cannot name a module',
+    /never a name/.test(body), true);
   check('issue: with a log, it is fenced inside a collapsed block',
     R.issueBody(found, 'TRACE-HERE').includes('<details><summary>Raw traffic</summary>'), true);
   check('issue: the title names every address', R.issueTitle(found),

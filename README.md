@@ -12,7 +12,7 @@ clearing fault memories. English, German and Hungarian.
 `web/js/protocol.test.mjs` replays bytes captured off the wire through the decoders and asserts
 the text the vendor's own software printed for those same bytes.
 
-**Current version: 0.80.** The app prints the version it is *actually running* in its footer, and
+**Current version: 0.81.** The app prints the version it is *actually running* in its footer, and
 that is the one worth reading at the car: the page is cached by a service worker and launched from
 a home-screen icon, so what starts in a car park can be older than what is on this page. If the two
 disagree, the copy on the phone is stale — open it once with a signal and it updates itself. The

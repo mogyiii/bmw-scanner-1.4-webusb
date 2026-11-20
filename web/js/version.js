@@ -14,4 +14,4 @@
  * worker has no ES modules. `report.test.mjs` asserts the two agree, because the failure mode of
  * forgetting is silent — the cache keeps its old name and nobody gets the update.
  */
-export const VERSION = '0.80';
+export const VERSION = '0.81';

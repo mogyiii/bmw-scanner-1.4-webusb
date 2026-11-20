@@ -39,13 +39,27 @@ export function issueBody(found, logText) {
     lines.push(`| \`${addrOf(f.addr)}\` | ${f.kwp ? 'KWP2000' : 'DS2'} | ${f.id ? f.id.part : '—'} `
       + `| ${f.id ? f.id.hw : '—'} | \`${P.hex(f.ident)}\` |`);
   }
-  lines.push('', '**Car:** (model, year, engine — if you would share it)', '');
+  lines.push('', '**Car:** (model, year, engine)', '');
+  // Equipment, not model, is what narrows an unknown address: a unit cannot be the park-distance
+  // controller on a car with no parking sensors. The first real report gave the model and engine —
+  // both already known — and nothing that could identify a module.
+  lines.push('**Fitted to it:** (parking sensors, sat nav, phone prep, sunroof, multifunction '
+    + 'steering wheel, amplifier — whatever you know)', '');
   if (logText) {
     lines.push('<details><summary>Raw traffic</summary>', '', '```', logText, '```', '</details>');
   } else {
-    lines.push('<!-- The raw traffic did not fit in the link. Press the copy button in the app',
-               '     and paste it here - it carries every byte this reading was built from. -->');
+    // Visible text, not an HTML comment. It *was* a comment, and GitHub renders a comment as
+    // nothing at all — so the one instruction asking the reporter to do more work sat in the least
+    // visible place in the whole issue. The first real report came back without the trace.
+    lines.push('**The raw traffic did not fit in the link.** Press **Copy** in the app and paste it'
+      + ' below — it carries every byte this reading was built from.', '');
   }
+  // Why a single report is still worth filing, said where the reporter will read it.
+  lines.push('---', '',
+    '<sub>One report cannot name a module on its own: a BMW unit returns a part number, never a '
+    + 'name — the name lives in a lookup table inside the vendor software. What identifies an '
+    + 'address is the pattern across several cars: one that appears wherever an option is fitted '
+    + 'and never where it is not.</sub>');
   return lines.join('\n');
 }
 
