@@ -128,8 +128,14 @@ Kept separate from "should work", because the difference is the habit this whole
 | **Firefox** | **impossible** | No WebUSB. |
 
 **Hardware:** one cable, a BMW Scanner 1.4.0 reporting `PASOFT / BMW Scanner V14x`, USB
-`0333:0137`, serial `PA5BG64Y`. **Car:** one 2002 E46 316i with the N42 engine. Other DS2-era BMWs
-are expected to read; none has been tried.
+`0333:0137`, serial `PA5BG64Y`. **Car:** one 2002 E46 316i with the N42 engine.
+
+**A second car has now read.** [Issue #2](https://github.com/mogyiii/bmw-scanner-1.4-webusb/issues/2)
+came from somebody else's 2002 E46 with an N42B20A — a different car and a different cable, reported
+through the app's own unknown-module button. It found two modules this app has no tile for, `0x50`
+and `0x68`, and both frames pass their DS2 checksum, so the sweep and the identity decoder both
+behaved on hardware they had never seen. That is one external data point, not a model range: no BMW
+other than a 2002 E46 has been tried by anyone.
 
 If you run it anywhere not marked "yes", the result either way is worth an issue — "it just
 worked" is as useful here as a failure.
