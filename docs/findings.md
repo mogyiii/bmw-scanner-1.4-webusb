@@ -1,5 +1,53 @@
 # Findings — BMW Scanner 1.4.0 cable and its Windows software
 
+> # 🔬 A hypothesis for `0x50` and `0x68`, and what would test it — 2026-11-20
+>
+> **Marked as a hypothesis on purpose. Nothing below is measured, and it must not be shipped as a
+> module name until a third car settles it.**
+>
+> Issue #2 reported two addresses from somebody else's 2002 E46 N42B20A. Both frames are valid DS2 —
+> the length byte matches the frame and the checksum holds — so the data is complete. What it cannot
+> contain is a name: a BMW unit returns a part number, never an identity string.
+>
+> **The contrast is clean.** Our car was probed at both addresses, on both protocols, and only the
+> echo came back:
+>
+> ```
+> 0x46F1 @50  50 04 00 54            DS2  — no reply
+> 0x06F3 @50  B8 50 F1 02 1A 80 81   KWP  — no reply
+> 0x46F1 @68  68 04 00 6C            DS2  — no reply
+> ```
+>
+> So whatever these are, they are things their car has and ours does not. The reporter's extras over
+> a base 316i: seat heating, cruise control **with a multifunction steering wheel**, on-board
+> computer, a retrofitted towbar, digital climate, a **CD radio**, manual gearbox.
+>
+> Most of that is not a DS2 module. Digital climate is the `A/C` we already read at `0x5B` on our
+> own car. The on-board computer lives in the cluster. Seat heating is switches and wiring. The
+> towbar is a retrofit, and `AHM` does not appear among the 52 unit names in the vendor binary at
+> all.
+>
+> **That leaves three candidates for two addresses**, all three present in the vendor's own name
+> list: `MFL` (multifunction steering wheel), `RAD` (radio), and `GR2` (cruise control — though on
+> an N42 with a drive-by-wire throttle that is usually inside the DME rather than a unit of its own).
+>
+> **Which is which — a lean, not a finding.** `0x68` answers with a full identity: part 6.919.072,
+> HW 43, SW 41, built week 3 of 2002. `0x50` answers with a blank part number, no build date, HW 01,
+> SW 10. A radio is a substantial unit and would carry a part number; a steering-wheel button
+> interface is close to a matrix and might not. That reasoning is plausibility, which is exactly the
+> thing this project does not ship.
+>
+> **What would settle it, in order of preference:**
+>
+> 1. **A third car with one option and not the other.** A CD radio behind a plain steering wheel, or
+>    a multifunction wheel with a basic radio. Whichever address answers names itself.
+> 2. **Pulling the radio fuse on the reporter's car and sweeping again.** If `0x68` goes silent it is
+>    the radio. Cheap and reversible, with one caveat worth stating before anyone tries it: an E46
+>    radio can demand its security code after losing power.
+> 3. Finding the vendor's address-to-name table. Three attempts have failed — a pointer table, an
+>    address immediate near a name reference, and address text near name text. The 52 names are in
+>    there; the mapping is not stored as data.
+
 > # ✅ The seller's blurb explains the live data, and closes an old mistake — 2026-11-10
 >
 > The AliExpress listing carries PA-Soft's own marketing text for the **limited** edition — the
