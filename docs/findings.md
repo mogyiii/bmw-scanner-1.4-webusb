@@ -1,5 +1,54 @@
 # Findings — BMW Scanner 1.4.0 cable and its Windows software
 
+> # 🐛 The address-to-name table is not in the binary, and I nearly invented one — 2026-11-23
+>
+> Decompiling rather than byte-searching, which was the right move and still did not find it.
+>
+> **What came out, and it is genuinely new.** `FUN_005b1288` is a dispatcher that takes a unit name
+> and calls a per-unit handler. Thirty pairs, including the two we care about:
+>
+> ```
+> MFL -> FUN_005322fc      RAD -> FUN_00539660      TEL -> FUN_0053d36c
+> EWS -> FUN_004e59ec      LEW -> FUN_004f812c      ABS -> FUN_004f4d44
+> ```
+>
+> **The near-miss, which is the part worth keeping.** `FUN_0049c710` is a 20 KB function that
+> references both the unit names *and* a set of two-digit hex strings, and it pairs them:
+>
+> ```
+> FUN_00404ea8(local_c, &DAT_<hex string>);
+> if (bVar) { uVar10 = <index>; }
+> ```
+>
+> One block of it reads `00 -> 3`, `44 -> 19`, `80 -> 15`, **`50 -> 10`, `68 -> 21`** — which looks
+> exactly like the address table this hunt has been after, with entries for both reported addresses.
+> I was one step from writing it down.
+>
+> **It is not addresses. It is the `DI` field.** Cross-checking against our own car settles it:
+> our ZKE reports `DI 50` and our EWS reports `DI 81`, and both appear in that block. So
+> `FUN_0049c710` is the *variant selector* already documented above — DI to index to table, the
+> thing that produces `ME9.2 NG`, `MRS4` and `EWS3`. A table built from it would have been confident,
+> internally consistent, and wrong.
+>
+> The check that caught it was the same one that catches everything here: hold the candidate against
+> a reading from a car we have. Two minutes, and it is the only reason this entry is a bug report
+> rather than a feature.
+>
+> **Four methods, no mapping.** A pointer table; an address immediate near a name reference; address
+> text near name text; and now the per-unit handlers themselves — the four addresses we already know
+> (`0x44`, `0x57`, `0x29`, `0xD0`) appear nowhere in their own handlers' bodies. The main form's menu
+> items carry no `Tag` either.
+>
+> **A plainer explanation is now the likely one.** This software is driven *name first*: you pick a
+> unit from a menu and it queries the address. It may never need a mapping in the direction we want,
+> which would be why there isn't one.
+>
+> **So the fastest route is not reverse engineering at all.** A BMW Scanner cable ships with a CD —
+> it is in the AliExpress listing, `1 x USB Cable, 1 x CD`. The reporter has a car with these two
+> modules on it and the vendor's own software to read them with. One scan and its report prints the
+> names. That is the same method that named all ten modules on our car, and it needs no VM, no
+> licence, and nothing from us.
+
 > # 🔬 A hypothesis for `0x50` and `0x68`, and what would test it — 2026-11-20
 >
 > **Marked as a hypothesis on purpose. Nothing below is measured, and it must not be shipped as a
