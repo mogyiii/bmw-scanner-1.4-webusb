@@ -1,5 +1,30 @@
 # Findings — BMW Scanner 1.4.0 cable and its Windows software
 
+> # ✅ `0x68` is the radio, and the answer was in the report all along — 2026-11-23
+>
+> **BMW part `6 919 072` is the E46 Business CD radio head unit** — full number `65 12 6 919 072`,
+> an Alpine CD53. Looked up in a public parts catalogue, which is all it took.
+>
+> So **`0x68` = `RAD`**, and it is not an inference. The module states its own part number in its
+> identity frame, and the part number names it. Four things agree: the catalogue entry, the
+> reporter's own list of extras (*"CD-s rádió"*), `RAD` being in the vendor's 52 unit names, and a
+> build date of week 3 of 2002 on a 2002 car.
+>
+> **`0x50` stays a candidate.** `MFL`, the multifunction steering wheel, is still the best one — the
+> reporter has a multifunction wheel, and the addressing scheme that just predicted `0x68` correctly
+> also puts `MFL` at `0x50`. But that module answers with a blank part number, `0.000.000`, so there
+> is nothing to look up and nothing to confirm. One scheme getting one address right is not the same
+> as the scheme being verified.
+>
+> **The lesson is mine and it is not a new one.** I searched the binary four ways, ran a decompiler,
+> worked through a 20 KB function, and nearly published a table built on a misreading of the `DI`
+> field — while the answer sat in the submitted report as a number anyone can look up. The lighting
+> experiment was the same shape: the evidence was already in hand and I did not look at it.
+>
+> **What this changes in the app.** The unknown-module report already carries the part number, and
+> the part number is the single most useful thing in it. That deserves saying out loud in the issue
+> text rather than being left for someone to notice.
+
 > # 🐛 The address-to-name table is not in the binary, and I nearly invented one — 2026-11-23
 >
 > Decompiling rather than byte-searching, which was the right move and still did not find it.
