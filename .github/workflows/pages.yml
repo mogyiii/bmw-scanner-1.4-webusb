@@ -20,17 +20,34 @@ concurrency:
   group: pages
   cancel-in-progress: true
 
+# Build and deploy are two jobs on purpose, which is how GitHub's own Pages template does it.
+#
+# They used to be one, and it worked until it abruptly did not: on 2026-11-23 the upload logged
+# "Artifact github-pages has been successfully uploaded! Artifact ID is 14861361553", and 0.4
+# seconds later, in the same job, deploy-pages reported "Found 0 artifact(s)". It failed the same
+# way on a re-run, so it was not a blip. The run's own annotations show the actions being forced
+# from Node 20 onto Node 24, which is the only thing that changed between the last green run three
+# days earlier and this one.
+#
+# A job boundary is what makes the artifact reliably visible: `needs:` waits for the upload job to
+# finish and publish its metadata, rather than racing an API inside a single job. So do not merge
+# these back into one to save a few seconds of runner start-up.
 jobs:
-  deploy:
+  build:
     runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deploy.outputs.page_url }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:
           path: web
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+    steps:
       - id: deploy
         uses: actions/deploy-pages@v4
