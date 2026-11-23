@@ -54,12 +54,18 @@ export function issueBody(found, logText) {
     lines.push('**The raw traffic did not fit in the link.** Press **Copy** in the app and paste it'
       + ' below — it carries every byte this reading was built from.', '');
   }
+  // The BMWTNR column is the most useful thing in this report and nothing said so. Issue #2 was
+  // named from it in about a minute, after four failed attempts to find an address-to-name table
+  // inside the vendor binary — the answer had been sitting in the submitted data the whole time.
+  lines.push('', '> **The BMWTNR column is worth a look yourself.** It is the module’s own BMW '
+    + 'part number, and pasting it into any BMW parts catalogue usually names the unit outright. '
+    + 'A blank one (`0.000.000`) means the module stores no part number, and then it cannot.', '');
   // Why a single report is still worth filing, said where the reporter will read it.
   lines.push('---', '',
-    '<sub>One report cannot name a module on its own: a BMW unit returns a part number, never a '
-    + 'name — the name lives in a lookup table inside the vendor software. What identifies an '
-    + 'address is the pattern across several cars: one that appears wherever an option is fitted '
-    + 'and never where it is not.</sub>');
+    '<sub>A BMW unit returns a part number, never a name — the name lives in a lookup table inside '
+    + 'the vendor software. Where the part number is blank, what identifies an address is the '
+    + 'pattern across several cars: one that appears wherever an option is fitted and never where '
+    + 'it is not.</sub>');
   return lines.join('\n');
 }
 

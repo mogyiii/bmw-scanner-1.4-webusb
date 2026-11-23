@@ -12,7 +12,7 @@ clearing fault memories. English, German and Hungarian.
 `web/js/protocol.test.mjs` replays bytes captured off the wire through the decoders and asserts
 the text the vendor's own software printed for those same bytes.
 
-**Current version: 0.81.** The app prints the version it is *actually running* in its footer, and
+**Current version: 0.82.** The app prints the version it is *actually running* in its footer, and
 that is the one worth reading at the car: the page is cached by a service worker and launched from
 a home-screen icon, so what starts in a car park can be older than what is on this page. If the two
 disagree, the copy on the phone is stale — open it once with a signal and it updates itself. The
@@ -61,6 +61,22 @@ which is what the **Missing?** tile is for.
 
 `0x1B` was missed for a fortnight: it is not in the vendor's fifty-six-address DS2 probe list, only
 in its eight-address KWP one, so every sweep walked past it.
+
+### And one that is not on it
+
+| addr | module | | protocol |
+|---|---|---|---|
+| `0x68` | RAD | radio — **from somebody else's car** | DS2 |
+
+The first module here that this car does not have. It arrived through
+[issue #2](https://github.com/mogyiii/bmw-scanner-1.4-webusb/issues/2), from another 2002 E46, and
+it is named rather than guessed: its identity frame reports BMW part `6 919 072`, which a parts
+catalogue gives as the E46 Business CD head unit. Its tile sits dark on a car without one, the same
+as any other absent module.
+
+A second address came in that report, `0x50`, and it is **not** here. The best candidate is the
+multifunction steering wheel, but that module answers with a blank part number, so there is nothing
+to check it against. A candidate is not a finding and does not get a tile.
 
 ## Scope
 

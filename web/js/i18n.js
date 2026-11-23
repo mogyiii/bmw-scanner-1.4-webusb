@@ -30,6 +30,7 @@ const STRINGS = {
     'mod.ike': 'Műszerfal',
     'mod.srs': 'Légzsák',
     'mod.lcm': 'Világításvezérlő',
+    'mod.rad': 'Rádió',
 
     'vital.vin': 'alvázszám',
     'vital.km': 'kilométeróra',
@@ -222,6 +223,7 @@ const STRINGS = {
     'mod.ike': 'Instrument cluster',
     'mod.srs': 'Airbag',
     'mod.lcm': 'Lighting',
+    'mod.rad': 'Radio',
 
     'vital.vin': 'chassis number',
     'vital.km': 'odometer',
@@ -414,6 +416,7 @@ const STRINGS = {
     'mod.ike': 'Kombiinstrument',
     'mod.srs': 'Airbag',
     'mod.lcm': 'Lichtmodul',
+    'mod.rad': 'Radio',
 
     'vital.vin': 'Fahrgestellnummer',
     'vital.km': 'Kilometerstand',

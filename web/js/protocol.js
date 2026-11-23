@@ -268,6 +268,11 @@ export const MODULES = [
   { addr: 0x80, name: 'IKE',   icon: 'ike' },
   { addr: 0xa4, name: 'SRS',   icon: 'srs' },
   { addr: 0xd0, name: 'LCM',   icon: 'lcm' },
+  // The first module here that is not on the test car. It came from issue #2, another 2002 E46,
+  // and it is named rather than guessed: its identity frame reports BMW part 6 919 072, which a
+  // parts catalogue gives as the E46 Business CD head unit. DS2, from the framing of that reply.
+  // It will sit dark on any car without one, which is the same thing the other tiles do.
+  { addr: 0x68, name: 'RAD',   icon: 'rad' },
 ];
 
 /**

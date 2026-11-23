@@ -7,7 +7,7 @@
  */
 // Kept in step with `js/version.js` by hand - a classic service worker cannot import a module -
 // and `js/report.test.mjs` fails if the two ever drift.
-const CACHE = 'bmw-ds2-0.81';
+const CACHE = 'bmw-ds2-0.82';
 // `demo.js` is deliberately not precached: it is only ever loaded by `?demo=1`, and the car park
 // case this cache exists for does not involve a replay.
 const FILES = [

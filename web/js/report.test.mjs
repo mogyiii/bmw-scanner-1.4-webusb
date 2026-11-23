@@ -53,6 +53,10 @@ const bytes = (s) => Uint8Array.from(s.trim().split(/\s+/), (b) => parseInt(b, 1
     /Fitted to it/.test(body), true);
   check('issue: it says why one report alone cannot name a module',
     /never a name/.test(body), true);
+  // Issue #2 was named from its part number after four failed attempts to find an address-to-name
+  // table in the vendor binary. Nothing in the report had pointed at the column that held it.
+  check('issue: it points the reporter at the part number, which is what named issue #2',
+    /BMWTNR column is worth a look/.test(body), true);
   check('issue: with a log, it is fenced inside a collapsed block',
     R.issueBody(found, 'TRACE-HERE').includes('<details><summary>Raw traffic</summary>'), true);
   check('issue: the title names every address', R.issueTitle(found),
